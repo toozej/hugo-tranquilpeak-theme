@@ -9,7 +9,9 @@
                {{ if eq .Params.covermeta "out" }}hasCoverMetaOut{{ else }}hasCoverMetaIn{{ end }}
                {{ with .Params.coverCaption }}hasCoverCaption{{ end }}">
         <section class="postShorten-group main-content-wrap">
-          {{ $paginator := .Paginate (where .Site.RegularPages "Type" "in" site.Params.mainSections ) }}
+          {{ $filteredPages := where .Site.RegularPages "Type" "in" site.Params.mainSections }}
+          {{ $filteredPages = where $filteredPages "Params.unlisted" "ne" true }}
+          {{ $paginator := .Paginate $filteredPages }}  
           {{ range $paginator.Pages }}
             {{ .Render "summary" }}
           {{ end }}
